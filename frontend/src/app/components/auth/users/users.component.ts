@@ -24,6 +24,7 @@ import { AuthenticateResponse } from '../models/authenticate-response.model';
 import { AuthFilter } from 'src/app/components/auth/models/auth-filter.model';
 import { NewUserDialogComponent } from './new-user-dialog/new-user-dialog.component';
 import { JailUserDialogComponent } from './jail-user-dialog/jail-user-dialog.component';
+import { AddToRoleDialogComponent } from './add-to-role-dialog/add-to-role-dialog.component';
 
 /**
  * Users component for administrating users in the system.
@@ -293,6 +294,20 @@ export class UsersComponent implements OnInit {
         this.feedbackService.showInfo(`'${username}' successfully updated`);
         this.getUsers();
       }
+    });
+  }
+
+  /**
+   * Allows user to add a specific user to a role.
+   * 
+   * @param user User to edit
+   */
+   public addToRole(user: User) {
+
+    // Showing modal dialog.
+    this.dialog.open(AddToRoleDialogComponent, {
+      width: '550px',
+      data: user
     });
   }
 

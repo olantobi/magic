@@ -20,6 +20,9 @@
     .description-break {
       word-break: break-word;
     }
+    .error {
+      color: rgb(128,0,0);
+    }
   }
   .item-full-width {
     display: block;
@@ -64,14 +67,18 @@
     position: relative;
     .failed {
       position: absolute;
-      top: 1rem;
-      right: 1rem;
+      top: .5rem;
+      right: .5rem;
       color: #c88 !important;
     }
   }
 
   .no-bottom-margin {
     margin-bottom: .5rem;
+  }
+
+  .assumption-btn {
+    margin-top: 1rem;
   }
 
   @media screen and (min-width: 800px) {

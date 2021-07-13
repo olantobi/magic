@@ -6,6 +6,7 @@
 // Angular and system imports.
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 // Application specific imports.
 import { Backend } from '../../../models/backend.model';
@@ -31,11 +32,13 @@ export class AuthService {
   /**
    * Creates an instance of your service.
    * 
+   * @param httpClient Dependency injected HTTP client to handle (raw) HTTP requests, without backend dependencies
    * @param httpService Dependency injected HTTP service to handle HTTP requests
    * @param messageService Needed to transmit message when user logs out
    * @param backendService Dependency injected backend service to handle currently selected backends
    */
   constructor(
+    private httpClient: HttpClient,
     private httpService: HttpService,
     private messageService: MessageService,
     private backendService: BackendService) {
@@ -73,6 +76,15 @@ export class AuthService {
   }
 
   /**
+   * Invokes specified backend to check if auto-auth has been turned on.
+   * 
+   * @param url URL of backend to check
+   */
+   public autoAuth(url: string) {
+    return this.httpClient.get<Response>(url + '/magic/modules/system/auth/auto-auth');
+   }
+
+  /**
    * Authenticates user towards specified backend.
    * 
    * @param username Username
@@ -87,11 +99,24 @@ export class AuthService {
     // Returning new observer, chaining authentication and retrieval of endpoints.
     return new Observable<AuthenticateResponse>(observer => {
 
+      // Creating QUERY parameters.
+      let query = '';
+      if (username && username !== '') {
+        query += '?username=' + encodeURIComponent(username);
+        query += '&password=' + encodeURIComponent(password);
+      }
+
       // Authenticating user.
       this.httpService.get<AuthenticateResponse>(
-        '/magic/modules/system/auth/authenticate' +
-        '?username=' + encodeURI(username) +
-        '&password=' + encodeURI(password)).subscribe((auth: AuthenticateResponse) => {
+        '/magic/modules/system/auth/authenticate' + query, {
+
+          /*
+           * Notice, if we're doing Windows automatica authentication,
+           * there will be given a username/password to this method, at which point
+           * we'll have to make sure Angular passes in Windows credentials to endpoint.
+           */
+          withCredentials: query === '' ? true : false,
+        }).subscribe((auth: AuthenticateResponse) => {
 
           // Persisting backend data.
           this.backendService.current = {
@@ -114,6 +139,9 @@ export class AuthService {
             observer.next(auth);
             observer.complete();
 
+          }, (error: any) => {
+            observer.error(error);
+            observer.complete();
           });
 
       }, (error: any) => {
@@ -131,7 +159,11 @@ export class AuthService {
    */
   public logout(destroyPassword: boolean, showInfo: boolean = true) {
     if (this.authenticated) {
-      this.backendService.current.token = null;
+      this.backendService.current = {
+        url: this.backendService.current.url,
+        username: this.backendService.current.username,
+        password: destroyPassword ? null : this.backendService.current.password
+      };
       if (destroyPassword) {
         this.backendService.current.password = null;
       }

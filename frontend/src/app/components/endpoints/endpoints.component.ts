@@ -11,6 +11,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 // Application specific imports.
 import { Endpoint } from 'src/app/models/endpoint.model';
 import { EndpointService } from './services/endpoint.service';
+import { FeedbackService } from 'src/app/services/feedback.service';
 
 /**
  * Endpoints component allowing user to see and invoke his endpoints.
@@ -27,6 +28,11 @@ export class EndpointsComponent implements OnInit {
 
   // Filter for which items to display.
   private filter: string = '';
+
+  /**
+   * Will show system endpoints if true.
+   */
+  public displaySystem: boolean = false;
 
   /**
    * Columns to display in table.
@@ -46,9 +52,12 @@ export class EndpointsComponent implements OnInit {
   /**
    * Creates an instance of your component.
    * 
+   * @param feedbackService Needed to display feedback to user
    * @param endpointService Endpoint service required to retrieve meta information about endpoints, and invoke them generically
    */
-  constructor(private endpointService: EndpointService) { }
+  constructor(
+    private feedbackService: FeedbackService,
+    private endpointService: EndpointService) { }
 
   /**
    * Implementation of OnInit.
@@ -73,11 +82,14 @@ export class EndpointsComponent implements OnInit {
    * Returns items matching currently applied filter.
    */
   public filteredItems() {
-    if (this.filter === '') {
-      return this.endpoints;
-    } else {
-      return this.endpoints.filter(x => x.verb === this.filter || x.path.indexOf(this.filter) !== -1);
+    let result = this.endpoints;
+    if (this.displaySystem === false) {
+      result = result.filter(x => !x.path.startsWith('magic/modules/system/') && !x.path.startsWith('magic/modules/magic/'))
     }
+    if (this.filter !== '') {
+      result = result.filter(x => x.verb === this.filter || x.path.indexOf(this.filter) !== -1);
+    }
+    return result;
   }
 
   /**
@@ -133,6 +145,15 @@ export class EndpointsComponent implements OnInit {
     return item.auth.join(', ');
   }
 
+  /**
+   * Invoked when user needs to refresh his endpoints.
+   */
+  public refresh() {
+
+    // Invoking method responsible for re-retrieving endpoints again.
+    this.getEndpoints(() => this.feedbackService.showInfoShort('Endpoints refreshed'))
+  }
+
   /*
    * Private helper methods.
    */
@@ -140,13 +161,19 @@ export class EndpointsComponent implements OnInit {
   /*
    * Invokes backend to retrieve meta data about endpoints.
    */
-  private getEndpoints() {
+  private getEndpoints(onAfter: () => void = null) {
 
     // Invoking backend to retrieve endpoints.
     this.endpointService.endpoints().subscribe((endpoints: Endpoint[]) => {
 
       // Assigning model to result of invocation.
       this.endpoints = endpoints;
-    });
+
+      // Checking if caller supplied a lambda to execute afterwards.
+      if (onAfter) {
+        onAfter();
+      }
+
+    }, (error: any) => this.feedbackService.showError(error));
   }
 }

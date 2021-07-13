@@ -46,6 +46,11 @@ export class TransformModelService {
     result.returnId = (table.columns || []).filter(x => x.primary && !x.automatic).length === 0;
     result.overwrite = this.overwrite;
     result.validators = table.validators;
+    result.cqrs = table.cqrs;
+    result.cqrsAuthorisation = table.cqrsAuthorisation;
+    if (table.cqrsAuthorisation === 'roles' || table.cqrsAuthorisation === 'groups' || table.cqrsAuthorisation === 'users') {
+      result.cqrsAuthorisationValues = table.cqrsAuthorisationValues;
+    }
 
     // Checking if user configured endpoint to use cache or not.
     if (table.cache && table.cache > 0) {

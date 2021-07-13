@@ -1,0 +1,92 @@
+
+mat-card {
+  h2 {
+    margin-top: -2rem;
+    text-align: center;
+  }
+  button.app {
+    display: block;
+    width: 100px;
+    height: 100px;
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-color: rgba(0,128,0,.05);
+    transform: scale(1);
+    position: relative;
+    transform: rotate(0deg);
+    transition: box-shadow, transform;
+    transition-duration: .2s;
+    .version {
+      position: absolute;
+      bottom: 0;
+      right: .25rem;
+      margin-bottom: -.5rem;
+      color:rgb(128,128,128);
+      font-size: .5rem;
+    }
+    .title {
+      position: absolute;
+      top: .125rem;
+      right: .25rem;
+      margin-top: -.5rem;
+      color:rgb(150,150,150);
+      font-size: .8rem;
+    }
+  }
+  button.app.installed {
+    background-color: rgb(245,245,245);
+    opacity: .5;
+  }
+  button.app.incompatible {
+    background-color: rgb(245,205,205);
+    opacity: .5;
+    cursor: default;
+  }
+  button.app:hover, button.app:active {
+    box-shadow: 3px 3px 5px rgb(0,0,0,.5);
+    transform: rotate(7deg);
+    transition: box-shadow, transform;
+    transition-duration: .2s;
+  }
+  button:hover:nth-child(2),
+  button:hover:nth-child(4),
+  button:hover:nth-child(6),
+  button:hover:nth-child(8),
+  button:hover:nth-child(10),
+  button:hover:nth-child(12),
+  button:hover:nth-child(14),
+  button:hover:nth-child(16),
+  button:hover:nth-child(18),
+  button:active:nth-child(2),
+  button:active:nth-child(4),
+  button:active:nth-child(6),
+  button:active:nth-child(8),
+  button:active:nth-child(10),
+  button:active:nth-child(12),
+  button:active:nth-child(14),
+  button:active:nth-child(16),
+  button:active:nth-child(18) {
+    transform: rotate(-7deg);
+  }
+  button.app.installed:hover, button.app.installed:active {
+    transition: none !important;
+    transform: none;
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  }
+  button.app {
+    mat-icon {
+      font-size: 45px;
+      margin-left: -18px;
+      margin-top: -10px;
+      opacity: .5;
+    }
+  }
+  .clearfix {
+    clear: both;
+    display: table;
+  }
+  .button-strip {
+    margin-bottom: -2rem;
+  }
+}

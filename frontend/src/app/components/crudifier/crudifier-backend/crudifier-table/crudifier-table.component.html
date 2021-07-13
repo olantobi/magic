@@ -181,6 +181,53 @@
 
   </div>
 
+  <div class="splitter">
+
+    <div class="section-3">
+
+      <h3>SignalR</h3>
+
+      <mat-checkbox
+        matTooltip="Publish SignalR messages when creating, updating, or deleting records"
+        [(ngModel)]="table.cqrs">Publish</mat-checkbox>
+
+      <br>
+
+      <mat-form-field
+        *ngIf="table.cqrs"
+        class="form-field more-space"
+        matTooltip="Type of authorisation for SignalR messages"
+        appearance="outline">
+
+        <mat-label>Message authorisation type</mat-label>
+        <mat-select
+          [(ngModel)]="table.cqrsAuthorisation">
+          <mat-option
+            *ngFor="let idx of cqrsAuthorisationTypes"
+            [value]="idx">{{idx}}</mat-option>
+        </mat-select>
+
+      </mat-form-field>
+
+      <mat-form-field
+        class="form-field"
+        *ngIf="table.cqrs && (table.cqrsAuthorisation === 'roles' || table.cqrsAuthorisation === 'groups' || table.cqrsAuthorisation === 'users')"
+        matTooltip="Comma separated list of authorisation values"
+        appearance="outline">
+
+        <mat-label>Authorisation values</mat-label>
+        <input
+          matInput
+          type="text"
+          autocomplete="off"
+          [(ngModel)]="table.cqrsAuthorisationValues">
+
+      </mat-form-field>
+        
+    </div>
+
+  </div>
+
   <div *ngIf="advanced">
 
     <h3>Miscellaneous</h3>
@@ -220,7 +267,8 @@
 
   <div class="button-strip">
 
-    <mat-checkbox [(ngModel)]="advanced">Advanced</mat-checkbox>
+    <mat-checkbox
+      [(ngModel)]="advanced">Advanced</mat-checkbox>
 
     <button
       [disabled]="isMagicDatabase() || (!isGetIncluded() && !isDeleteIncluded() && !isPutIncluded() && !isPostIncluded())"

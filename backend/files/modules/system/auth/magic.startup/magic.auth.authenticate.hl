@@ -103,10 +103,19 @@ slots.create:magic.auth.authenticate
        */
       config.get:"magic:auth:authentication"
       if
-         not
-            eq
-               get-value:x:@config.get
-               .
+         and
+            not
+               eq
+                  get-value:x:@config.get
+                  .
+            not
+               eq
+                  get-value:x:@config.get
+                  .:
+            not
+               eq
+                  get-value:x:@config.get
+                  .:crypto.password.verify
          .lambda
 
 
@@ -114,9 +123,16 @@ slots.create:magic.auth.authenticate
              * User has overridden the default password authentication slot invocation.
              * Hence we replace the existing invocation to [crypto.password.verify]
              * with the slot found from the "appsettings.json" file.
+             *
+             * This is the part that basically allows for external username/password verifications,
+             * including using AD/Windows authentication, etc.
              */
-            set-name:x:+/*/*
-               get-value:x:@config.get
+            strings.split:x:@config.get
+               .:":"
+            set-name:x:+/+/*/*
+               get-value:x:@strings.split/0
+            set-value:x:+/*/*
+               get-value:x:@strings.split/1
             insert-after:x:@if/./**/crypto.password.verify
                .
                   foo
@@ -153,9 +169,9 @@ slots.create:magic.auth.authenticate
 
 
                   /*
-                   * Caller requested a "reset password link", hence the only
-                   * role we add user to is the "reset-password" role, and we
-                   * also add the [old-password] claim, which we check when user
+                   * Caller requested a "reset password link", hence
+                   * we add the user to the "reset-password" role, and
+                   * the [old-password] role, which we check when user
                    * actually attempts to change his password, to make sure one
                    * reset password link can only be used once.
                    *
@@ -165,9 +181,9 @@ slots.create:magic.auth.authenticate
                    */
                   crypto.hash:x:@data.read/*/*
                   unwrap:x:+/*/*
-                  add:x:+
+                  add:x:+/*/roles
                      .
-                        old-password:x:@crypto.hash
+                        .:x:@crypto.hash
                   auth.ticket.create
                      username:x:@.arguments/*/username
                      roles

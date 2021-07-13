@@ -10,6 +10,7 @@ import { Injectable } from '@angular/core';
 // Application specific imports.
 import { Status } from '../../../models/status.model';
 import { Response } from '../../../models/response.model';
+import { AppManifest } from '../models/app-manifest.model';
 import { KeyPair } from '../../crypto/models/key-pair.model';
 import { HttpService } from '../../../services/http.service';
 import { AuthService } from '../../auth/services/auth.service';
@@ -132,6 +133,74 @@ export class ConfigService {
       '/magic/modules/system/misc/gibberish?min=' +
       min +
       '&max=' + max);
+  }
+
+  /**
+   * Returns Bazar content to caller.
+   */
+   public getBazarManifest() {
+
+    // Invoking backend and returns app manifests to caller.
+    return this.httpService.get<AppManifest[]>('/magic/modules/system/bazar/apps');
+  }
+
+  /**
+   * Returns PayPal ID as configured in the backend.
+   */
+   public getPayPalID() {
+
+    // Invoking backend and returns app manifests to caller.
+    return this.httpService.get<Response>('/magic/modules/system/bazar/paypalid');
+  }
+
+  /**
+   * Returns README file for specified Bazar component.
+   * 
+   * @param module Module to retrieve README file for
+   */
+   public getReadMeFile(module: AppManifest) {
+
+    // Invoking backend and returns app's README file to caller.
+    return this.httpService.get<Response>(
+      '/magic/modules/system/bazar/readme?url=' +
+      encodeURIComponent(module.readme));
+  }
+
+  /**
+   * Returns Bazar content to caller.
+   * 
+   * @param url URL to where Bazar module can be found
+   * @param name Name of module
+   */
+   public installBazarModule(url: string, name: string) {
+
+    // Invoking backend and returns app manifests to caller.
+    return this.httpService.post<Response>('/magic/modules/system/bazar/install', {
+      url,
+      name,
+    });
+  }
+
+  /**
+   * Returns published Bazar apps to caller.
+   */
+   public getPublishedBazarApps() {
+
+    // Invoking backend and returns app manifests to caller.
+    return this.httpService.get<AppManifest[]>('/magic/modules/system/bazar/published-json');
+  }
+
+  /**
+   * Deletes the specified Bazar app, and its associated zip file.
+   */
+   public deleteBazarApp(module: string, filename: string) {
+
+    // Invoking backend and returns app manifests to caller.
+    return this.httpService.delete<Response>(
+      '/magic/modules/system/bazar/remove?module=' +
+      encodeURIComponent(module) +
+      '&filename=' + 
+      encodeURIComponent(filename));
   }
 
   /**

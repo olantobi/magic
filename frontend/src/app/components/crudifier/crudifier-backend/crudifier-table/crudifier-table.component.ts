@@ -55,6 +55,11 @@ export class CrudifierTableComponent {
   public advanced = false;
 
   /**
+   * Authorisation requirements for SignalR messages published during invocation of endpoint.
+   */
+  public cqrsAuthorisationTypes: string[] = ['none', 'inherited', 'roles', 'groups', 'users'];
+
+  /**
    * Model for component wrapping table.
    */
   @Input() public table: TableEx;

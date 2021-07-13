@@ -56,6 +56,13 @@ h3 {
     flex-direction: column;
     flex: .65;
   }
+  .section-3 {
+    flex-direction: column;
+    flex: 1;
+    .more-space {
+      margin-top: 2rem;
+    }
+  }
 }
 
 @media screen and (max-width: 1350px) {

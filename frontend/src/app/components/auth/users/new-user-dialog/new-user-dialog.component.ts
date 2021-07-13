@@ -33,6 +33,11 @@ export class NewUserDialogComponent {
   public password: string = '';
 
   /**
+   * Whether or not password should be hidden or not.
+   */
+  public hide = true;
+
+  /**
    * Creates an instance of your component.
    * 
    * @param userService Used to create a new user
@@ -77,5 +82,15 @@ export class NewUserDialogComponent {
       // Success! User created.
       this.dialogRef.close(this.username);
     }, (error: any) => this.feedbackService.showError(error));
+  }
+
+  /**
+   * Invoked when dialog should simply be closed without updating
+   * an existing or creating a new user.
+   */
+   public close() {
+
+    // Simply closing dialog without passing data to caller.
+    this.dialogRef.close();
   }
 }

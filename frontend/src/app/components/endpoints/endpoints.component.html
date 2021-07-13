@@ -1,22 +1,39 @@
 
 <mat-card>
 
-  <mat-form-field class="fill-width" appearance="outline">
+  <mat-slide-toggle
+    [(ngModel)]="displaySystem"
+    class="show-system"
+    matTooltip="Show system endpoints"
+    labelPosition="before">System</mat-slide-toggle>
 
-    <mat-label>Filter</mat-label>
-    <input
-      matInput
-      type="text"
-      autocomplete="off"
-      [formControl]="filterFormControl">
-    <mat-icon
-      matSuffix
-      *ngIf="filterFormControl.value.trim() !== ''"
-      class="button"
-      role="button"
-      (click)="clearFilter()">clear</mat-icon>
+  <div class="filter-wrapper">
 
-  </mat-form-field>
+    <mat-form-field class="fill-width" appearance="outline">
+
+      <mat-label>Filter</mat-label>
+      <input
+        matInput
+        type="text"
+        autocomplete="off"
+        [formControl]="filterFormControl">
+      <mat-icon
+        matSuffix
+        *ngIf="filterFormControl.value.trim() !== ''"
+        class="button"
+        role="button"
+        (click)="clearFilter()">clear</mat-icon>
+
+    </mat-form-field>
+
+    <button
+      mat-icon-button
+      matTooltip="Refresh endpoints"
+      (click)="refresh()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+
+  </div>
 
   <table
     *ngIf="endpoints"
@@ -42,7 +59,10 @@
       <td
         mat-cell
         class="auth-col"
-        *matCellDef="let el">{{getAuth(el)}}</td>
+        *matCellDef="let el">
+          {{getAuth(el)}}
+          <mat-icon *ngIf="el.error" [matTooltip]="el.error" class="error-icon">warning</mat-icon>
+        </td>
     </ng-container>
 
     <ng-container matColumnDef="show-details">
@@ -66,7 +86,7 @@
 
     <tr
       mat-row
-      [ngClass]="(shouldDisplayDetails(el) ? 'selected ' : '') + 'log-row'"
+      [ngClass]="((shouldDisplayDetails(el) ? 'selected ' : '') + 'row') + (el.error ? ' error' : '')"
       (click)="toggleDetails(el)"
       *matRowDef="let el; columns: displayedColumns;"></tr>
 

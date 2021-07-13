@@ -6,6 +6,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Server.IISIntegration;
 using magic.library;
 using magic.lambda.sockets;
 using magic.lambda.logging.helpers;
@@ -25,6 +26,13 @@ namespace magic.backend
         {
             services.AddSingleton(Configuration);
             services.AddControllers().AddNewtonsoftJson();
+
+            /*
+             * Checking if we should add IIS authentication scheme, which we
+             * only do if configuration has declared an "auto login slot".
+             */
+            if (!string.IsNullOrEmpty(Configuration["magic:auth:auto-auth"]))
+                services.AddAuthentication(IISDefaults.AuthenticationScheme);
 
             /*
              * Initializing Magic.
@@ -52,8 +60,13 @@ namespace magic.backend
 
             app.UseHttpsRedirection();
 
-            // Necessary to make SignalR work.
-            app.UseCors(x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+            // Applying CORS.
+            var origins = Configuration["magic:frontend:urls"];
+            if (!string.IsNullOrEmpty(origins))
+                app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins(origins.Split(',')));
+            else
+                app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
             app.UseAuthentication();
             app.UseRouting().UseEndpoints(conf =>
             {

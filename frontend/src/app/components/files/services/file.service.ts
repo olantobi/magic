@@ -10,8 +10,9 @@ import { Injectable } from '@angular/core';
 import { saveAs } from "file-saver";
 
 // Application specific imports.
-import { HttpService } from '../../../services/http.service';
 import { Response } from '../../../models/response.model';
+import { HttpService } from '../../../services/http.service';
+import { MacroDefinition } from './models/macro-definition.model';
 
 /**
  * File service allowing you to read, download, upload and delete files.
@@ -205,6 +206,21 @@ export class FileService {
   }
 
   /**
+   * Downloads a file to your backend from an external URL.
+   * 
+   * @param folder Folder on server where user wants to save the file
+   * @param url URL to file user wants to download to his local server
+   */
+   public downloadFileToBackend(folder: string, url: string) {
+
+    // Invoking backend to download file to server.
+    return this.httpService.post<Response>('/magic/modules/system/file-system/download-from-url', {
+      folder,
+      url,
+    });
+  }
+
+  /**
    * Downloads a file from backend.
    * 
    * @param path File to download
@@ -220,7 +236,6 @@ export class FileService {
         const disp = res.headers.get('Content-Disposition');
         let filename = disp.substr(disp.indexOf('=') + 1);
         filename = filename.substr(1, filename.lastIndexOf('"') - 1);
-        console.log(filename);
         const file = new Blob([res.body], { type: 'application/zip' });
         saveAs(file, filename);
       });
@@ -268,5 +283,32 @@ export class FileService {
     return this.httpService.delete<Response>(
       '/magic/modules/system/file-system/folder?folder=' +
       encodeURIComponent(folder));
+  }
+
+  /**
+   * Returns macro definition to caller for specified macro.
+   * 
+   * @param file Full path of macro to retrieve meta information about
+   */
+  public getMacroDefinition(file: string) {
+
+    // Invoking backend and returning observable to caller.
+    return this.httpService.get<MacroDefinition>('/magic/modules/system/ide/macro?macro=' +
+      encodeURIComponent(file));
+  }
+
+  /**
+   * Returns macro definition to caller for specified macro.
+   * 
+   * @param file Full path of macro to retrieve meta information about
+   * @param args Arguments to macro execution
+   */
+   public executeMacro(file: string, args: any) {
+
+    // Invoking backend and returning observable to caller.
+    return this.httpService.post<Response>('/magic/modules/system/ide/macro', {
+      macro: file,
+      args
+    });
   }
 }

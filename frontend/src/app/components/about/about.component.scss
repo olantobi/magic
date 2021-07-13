@@ -1,0 +1,28 @@
+
+mat-card {
+  max-width: 850px;
+  margin-left: auto;
+  margin-right: auto;
+  .me {
+    float: right;
+    max-width: 200px;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+  }
+  .clearfix {
+    clear: both;
+    display: table;
+    margin-bottom: 2rem;
+  }
+  ngx-paypal {
+    display: block;
+    width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  blockquote {
+    font-size: 1.2rem;
+    font-style:italic;
+    color:rgb(128,128,128);
+  }
+}

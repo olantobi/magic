@@ -10,21 +10,12 @@
 
 .obscurer {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0,0,0,.5);
+  top: .5rem;
+  left: calc(50% - 25px);
   z-index: 1001;
   animation-name: fade-in;
   animation-fill-mode: forwards;
   animation-duration: .5s;
-  .mat-spinner {
-    position: absolute;
-    z-index: 1002;
-    left: calc(50% - 25px);
-    top: calc(50% - 25px);
-  }
 }
 
 mat-sidenav-container {
@@ -68,7 +59,7 @@ mat-sidenav-container {
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: url(/assets/bg.jpg);
+      background-image: url(/assets/bg1.jpg);
       background-repeat: repeat;
       background-size: 300px 300px;
       opacity: .3;
@@ -244,7 +235,7 @@ mat-tab-group .mat-tab-label .mat-tab-label-content {
 /*
  * Light theme overrides.
  */
- ::ng-deep .light {
+::ng-deep .light {
   ::ng-deep mat-horizontal-stepper.mat-stepper-horizontal,
   ::ng-deep mat-horizontal-stepper.mat-stepper-vertical {
     background-color: rgb(245,245,245);
@@ -327,4 +318,12 @@ mat-tab-group .mat-tab-label .mat-tab-label-content {
 
 ::ng-deep.error-snack-bar {
   background-color: rgb(120,0,0) !important;
+}
+
+.light {
+  .img-wrapper {
+    background-image: url(/assets/bg2.jpg) !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+  }
 }

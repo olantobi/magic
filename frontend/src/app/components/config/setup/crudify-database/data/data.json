@@ -1,7 +1,6 @@
 [
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"crypto_invocations",
@@ -82,7 +81,6 @@
   },
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"crypto_keys",
@@ -123,7 +121,6 @@
   },
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"crypto_keys",
@@ -231,7 +228,6 @@
   },
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"crypto_keys",
@@ -277,7 +273,6 @@
   },
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"crypto_keys",
@@ -296,7 +291,6 @@
   },
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"roles",
@@ -314,11 +308,11 @@
              "description":"string"
           }
        ]
-    }
+    },
+    "validators": "validators.regex:x:@.arguments/*/name\r\n   regex:^[A-Za-z0-9\\-_]*$"
   },
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"roles",
@@ -351,7 +345,6 @@
   },
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"roles",
@@ -375,7 +368,6 @@
   },
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"roles",
@@ -394,7 +386,6 @@
   },
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"users",
@@ -420,7 +411,6 @@
   },
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"users",
@@ -468,7 +458,6 @@
   },
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"users",
@@ -494,7 +483,6 @@
   },
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"users",
@@ -513,7 +501,6 @@
   },
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"users_roles",
@@ -535,7 +522,6 @@
   },
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"users_roles",
@@ -565,7 +551,6 @@
   },
   {
     "overwrite": true,
-    "databaseType": null,
     "moduleName":"magic",
     "database":"[generic|magic]",
     "table":"users_roles",
